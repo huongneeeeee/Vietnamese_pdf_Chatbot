@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ChatWithUPDF (Flask)</title>
+    <!-- Link đến file CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="sidebar-header">
+            <h3>Upload PDF</h3>
+        </div>
+        <div class="sidebar-content">
+            <input type="file" id="pdf-uploader" multiple accept=".pdf">
+            <button id="upload-button">Submit & Process</button>
+            <div id="upload-spinner" class="spinner" style="display: none;"></div>
+            <div id="upload-status"></div>
+            
+            <h3 class="manage-title">Manage PDFs</h3>
+            <div id="pdf-list">
+                <p class="info-text">No PDFs uploaded yet.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Khung chat chính -->
+    <div class="chat-container">
+        <div class="chat-header">
+            <h3>Chat with your PDF files</h3>
+            <button id="clean-button" title="Clean data and reload">Clean</button>
+        </div>
+        
+        <div id="chat-messages" class="chat-messages">
+            <!-- Tin nhắn chat sẽ được thêm vào đây bằng JavaScript -->
+        </div>
+
+        <div id="thinking-indicator" style="display: none;">
+            <div class="message-bubble bot">
+                <div class="spinner-dots">
+                    <div class="dot"></div><div class="dot"></div><div class="dot"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="chat-input-area">
+            <input type="text" id="user-input" placeholder="Ask a Question from the PDF Files...">
+            <button id="send-button">Gửi</button>
+        </div>
+    </div>
+
+    <!-- Link đến file JavaScript -->
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
