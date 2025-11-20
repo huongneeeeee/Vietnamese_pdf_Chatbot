@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ChatWithUPDF (Gemini Style)</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="sidebar">
+        <div class="sidebar-header">
+            <button id="new-chat-btn" class="new-chat-btn">
+                <i class="fas fa-plus"></i> Cuộc trò chuyện mới
+            </button>
+        </div>
+
+        <div class="sidebar-section">
+            <h4 class="section-title">Lịch sử trò chuyện</h4>
+            <div id="chat-history-list" class="history-list">
+                </div>
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="sidebar-section">
+            <h4 class="section-title">Quản lý File Upload</h4>
+            <input type="file" id="pdf-uploader" multiple accept=".pdf, .docx, .txt">
+            <button id="upload-button">Upload & Process</button>
+            <div id="upload-spinner" class="spinner" style="display: none;"></div>
+            <div id="upload-status"></div>
+            
+            <div id="pdf-list">
+                <p class="info-text">Chưa có file nào.</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="chat-container">
+        <div class="chat-header">
+            <h3>Chatbot RAG</h3>
+            <button id="clean-button" title="Xóa toàn bộ dữ liệu"><i class="fas fa-trash"></i> Reset All</button>
+        </div>
+        
+        <div id="chat-messages" class="chat-messages"></div>
+
+        <div id="thinking-indicator" style="display: none;">
+            <div class="message-bubble bot">
+                <div class="spinner-dots"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div>
+            </div>
+        </div>
+
+        <div class="chat-input-area">
+            <input type="text" id="user-input" placeholder="Nhập câu hỏi của bạn...">
+            <button id="send-button"><i class="fas fa-paper-plane"></i></button>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
