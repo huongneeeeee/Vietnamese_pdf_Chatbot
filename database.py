@@ -7,7 +7,7 @@ def init_db():
     conn = sqlite3.connect(DB_NAME)
     c = conn.cursor()
     
-    # 1. Bảng lưu nội dung chat (chi tiết)
+    # 1. Bảng lịch sử chat
     c.execute('''
         CREATE TABLE IF NOT EXISTS history (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -18,7 +18,7 @@ def init_db():
         )
     ''')
     
-    # 2. Bảng lưu danh sách các phiên chat (Sessions)
+    # 2. Bảng danh sách sessions
     c.execute('''
         CREATE TABLE IF NOT EXISTS sessions (
             session_id TEXT PRIMARY KEY,
@@ -26,22 +26,71 @@ def init_db():
             created_at DATETIME DEFAULT CURRENT_TIMESTAMP
         )
     ''')
+
+    # 3. [MỚI] Bảng liên kết Session - File
+    # Bảng này giúp nhớ: Session A có những file nào.
+    c.execute('''
+        CREATE TABLE IF NOT EXISTS session_files (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            session_id TEXT NOT NULL,
+            filename TEXT NOT NULL,
+            file_path TEXT,
+            uploaded_at DATETIME DEFAULT CURRENT_TIMESTAMP
+        )
+    ''')
     
     conn.commit()
     conn.close()
 
+# --- CÁC HÀM CHO SESSION FILES ---
+def add_file_to_session(session_id, filename, file_path):
+    """Gắn một file vào session cụ thể"""
+    conn = sqlite3.connect(DB_NAME)
+    c = conn.cursor()
+    # Kiểm tra xem file đã có trong session này chưa để tránh trùng
+    c.execute("SELECT id FROM session_files WHERE session_id = ? AND filename = ?", (session_id, filename))
+    if c.fetchone() is None:
+        c.execute("INSERT INTO session_files (session_id, filename, file_path) VALUES (?, ?, ?)", 
+                  (session_id, filename, file_path))
+    conn.commit()
+    conn.close()
+
+def get_files_by_session(session_id):
+    """Lấy danh sách file của một session"""
+    conn = sqlite3.connect(DB_NAME)
+    conn.row_factory = sqlite3.Row
+    c = conn.cursor()
+    c.execute("SELECT filename FROM session_files WHERE session_id = ?", (session_id,))
+    rows = c.fetchall()
+    conn.close()
+    return [row['filename'] for row in rows]
+
+def remove_file_from_session(session_id, filename):
+    """Gỡ file khỏi session (nhưng không xóa file gốc trên đĩa nếu session khác đang dùng)"""
+    conn = sqlite3.connect(DB_NAME)
+    c = conn.cursor()
+    c.execute("DELETE FROM session_files WHERE session_id = ? AND filename = ?", (session_id, filename))
+    conn.commit()
+    conn.close()
+
+def delete_session(session_id):
+    """Xóa toàn bộ dữ liệu của session"""
+    conn = sqlite3.connect(DB_NAME)
+    c = conn.cursor()
+    c.execute("DELETE FROM history WHERE session_id = ?", (session_id,))
+    c.execute("DELETE FROM sessions WHERE session_id = ?", (session_id,))
+    c.execute("DELETE FROM session_files WHERE session_id = ?", (session_id,)) # Xóa liên kết file
+    conn.commit()
+    conn.close()
+
+# --- CÁC HÀM CŨ (GIỮ NGUYÊN) ---
 def save_message(session_id, user_query, bot_response):
     conn = sqlite3.connect(DB_NAME)
     c = conn.cursor()
-    
-    # Kiểm tra xem session này đã tồn tại chưa
     c.execute("SELECT session_id FROM sessions WHERE session_id = ?", (session_id,))
     if c.fetchone() is None:
-        # Nếu chưa, tạo session mới và lấy câu hỏi đầu tiên làm tiêu đề (giới hạn 50 ký tự)
         short_title = (user_query[:47] + '...') if len(user_query) > 47 else user_query
         c.execute("INSERT INTO sessions (session_id, title) VALUES (?, ?)", (session_id, short_title))
-    
-    # Lưu tin nhắn
     c.execute("INSERT INTO history (session_id, user_query, bot_response) VALUES (?, ?, ?)",
               (session_id, user_query, bot_response))
     conn.commit()
@@ -54,7 +103,6 @@ def get_history(session_id):
     c.execute("SELECT user_query, bot_response FROM history WHERE session_id = ? ORDER BY timestamp ASC", (session_id,))
     rows = c.fetchall()
     conn.close()
-    
     history = []
     for row in rows:
         history.append({"role": "user", "content": row["user_query"]})
@@ -62,7 +110,6 @@ def get_history(session_id):
     return history
 
 def get_all_sessions():
-    """Lấy danh sách tất cả các cuộc trò chuyện, sắp xếp mới nhất lên đầu"""
     conn = sqlite3.connect(DB_NAME)
     conn.row_factory = sqlite3.Row
     c = conn.cursor()
@@ -71,20 +118,7 @@ def get_all_sessions():
     conn.close()
     return [{"session_id": row["session_id"], "title": row["title"]} for row in rows]
 
-def delete_session(session_id):
-    conn = sqlite3.connect(DB_NAME)
-    c = conn.cursor()
-    c.execute("DELETE FROM history WHERE session_id = ?", (session_id,))
-    c.execute("DELETE FROM sessions WHERE session_id = ?", (session_id,))
-    conn.commit()
-    conn.close()
-
 def clear_history(session_id):
-    """
-    Hàm này để tương thích với app.py đang gọi db.clear_history.
-    Nó sẽ thực hiện việc xóa session giống như delete_session.
-    """
     delete_session(session_id)
 
-# Chạy khởi tạo DB
 init_db()

@@ -1,6 +1,5 @@
 document.addEventListener("DOMContentLoaded", () => {
     
-    // === DOM ELEMENTS ===
     const pdfUploader = document.getElementById("pdf-uploader");
     const uploadButton = document.getElementById("upload-button");
     const uploadSpinner = document.getElementById("upload-spinner");
@@ -16,12 +15,10 @@ document.addEventListener("DOMContentLoaded", () => {
     const chatHistoryList = document.getElementById("chat-history-list");
     const newChatBtn = document.getElementById("new-chat-btn");
 
-    // === STATE ===
     let chatHistory = []; 
     let selectedPDFs = new Set();
     let currentSessionId = null; 
 
-    // === INIT FUNCTION ===
     function init() {
         const savedSession = localStorage.getItem("current_session_id");
         if (savedSession) {
@@ -29,12 +26,13 @@ document.addEventListener("DOMContentLoaded", () => {
         } else {
             createNewSessionId(); 
         }
+        refreshInterface();
+    }
 
+    function refreshInterface() {
         loadSidebarSessions(); 
         loadChatContent(currentSessionId);
-        
-        // MỚI: Tải danh sách file upload khi vào trang
-        loadUploadedFiles(); 
+        loadUploadedFiles(currentSessionId); // Load file của session hiện tại
     }
 
     function createNewSessionId() {
@@ -43,91 +41,56 @@ document.addEventListener("DOMContentLoaded", () => {
         return currentSessionId;
     }
 
-    // === MỚI: TẢI DANH SÁCH FILE TỪ SERVER ===
-    async function loadUploadedFiles() {
+    // === 1. LOAD FILE CỦA SESSION ===
+    async function loadUploadedFiles(sessionId) {
         try {
-            const response = await fetch('/get_uploaded_files');
+            // Gửi session_id lên để lấy đúng file
+            const response = await fetch(`/get_uploaded_files?session_id=${sessionId}`);
             const data = await response.json();
-            if (data.files) {
-                updatePDFList(data.files);
-            }
+            updatePDFList(data.files || []);
         } catch (error) {
             console.error("Failed to load uploaded files:", error);
         }
     }
 
-    // === LOGIC: SIDEBAR SESSIONS ===
-    async function loadSidebarSessions() {
-        try {
-            const res = await fetch('/get_sessions');
-            const sessions = await res.json();
-            
-            chatHistoryList.innerHTML = "";
-            
-            sessions.forEach(sess => {
-                const item = document.createElement("div");
-                item.className = `history-item ${sess.session_id === currentSessionId ? 'active' : ''}`;
-                
-                const titleSpan = document.createElement("span");
-                titleSpan.textContent = sess.title || "Cuộc trò chuyện mới";
-                item.appendChild(titleSpan);
-
-                const delBtn = document.createElement("button");
-                delBtn.className = "delete-chat-btn";
-                delBtn.innerHTML = "×";
-                delBtn.onclick = (e) => {
-                    e.stopPropagation(); 
-                    deleteSession(sess.session_id);
-                };
-                item.appendChild(delBtn);
-
-                item.onclick = () => switchSession(sess.session_id);
-                
-                chatHistoryList.appendChild(item);
-            });
-        } catch (err) {
-            console.error("Error loading sessions:", err);
-        }
+    // === 2. NÚT CUỘC TRÒ CHUYỆN MỚI (ĐÚNG Ý BẠN) ===
+    async function handleNewChat() {
+        // Logic: Chỉ tạo ID mới, giao diện mới. KHÔNG XÓA DỮ LIỆU CŨ.
+        createNewSessionId();
+        
+        // Reset giao diện
+        chatMessages.innerHTML = ""; 
+        chatHistory = [];
+        pdfUploader.value = "";
+        if (uploadStatus) uploadStatus.textContent = "";
+        
+        // Reset danh sách file về rỗng (vì session mới chưa có file)
+        updatePDFList([]); 
+        
+        // Cập nhật sidebar để bỏ highlight cái cũ
+        loadSidebarSessions();
     }
 
-    async function handleNewChat() {
-        createNewSessionId();
-        chatMessages.innerHTML = ""; 
-        chatHistory = []; 
+    // === 3. CHUYỂN SESSION (KHI BẤM LỊCH SỬ) ===
+    function switchSession(sessionId) {
+        if (currentSessionId === sessionId) return; 
+        currentSessionId = sessionId;
+        localStorage.setItem("current_session_id", currentSessionId);
+        
+        // Khi chuyển session, load lại cả Chat và File của session đó
+        loadChatContent(sessionId);
+        loadUploadedFiles(sessionId); // <--- QUAN TRỌNG: File cũ sẽ hiện lại
         loadSidebarSessions(); 
     }
 
-    // === LOGIC: CLEAN / RESET ALL ===
-    async function handleCleanData() {
-        const isConfirmed = confirm("CẢNH BÁO: Bạn có chắc chắn muốn xoá tất cả dữ liệu?\n\nHành động này sẽ:\n- Xóa toàn bộ lịch sử chat.\n- Xóa toàn bộ file đã upload.\n- Không thể hoàn tác.");
-
-        if (!isConfirmed) return;
-
-        try {
-            const response = await fetch('/clean', { 
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ session_id: currentSessionId })
-            });
-            const data = await response.json();
-
-            if (data.status === 'success') {
-                alert("Đã xóa dữ liệu thành công! Trang web sẽ được tải lại.");
-                location.reload(); 
-            } else {
-                alert(`Lỗi: ${data.message}`);
-            }
-        } catch (error) {
-            console.error("Clean error:", error);
-            alert("Đã xảy ra lỗi khi kết nối với server.");
-        }
-    }
-
-    // === LOGIC: UPLOAD ===
+    // === 4. UPLOAD FILE (GẮN VỚI SESSION) ===
     async function handleUpload() {
         if (pdfUploader.files.length === 0) return;
+        
         const formData = new FormData();
         for (const file of pdfUploader.files) formData.append("pdf_docs", file);
+        // Gửi kèm Session ID
+        formData.append("session_id", currentSessionId); 
         
         uploadSpinner.style.display = "block";
         uploadButton.disabled = true; 
@@ -136,11 +99,10 @@ document.addEventListener("DOMContentLoaded", () => {
             const response = await fetch('/upload', { method: 'POST', body: formData });
             const data = await response.json();
             
-            if (data.errors && data.errors.length > 0) {
-                alert("Một số file bị lỗi:\n" + data.errors.join("\n"));
-            }
+            if (data.errors && data.errors.length > 0) alert("Lỗi:\n" + data.errors.join("\n"));
+            
             updatePDFList(data.processed_files);
-            uploadStatus.textContent = `Đã xử lý xong ${data.processed_files.length} file.`;
+            uploadStatus.textContent = `Đã thêm ${data.processed_files.length} file vào cuộc trò chuyện này.`;
         } catch (e) { 
             console.error(e); 
             uploadStatus.textContent = "Lỗi upload.";
@@ -151,10 +113,10 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
-    // === LOGIC: RENDER DANH SÁCH FILE ===
+    // === 5. XÓA FILE LẺ (KHỎI SESSION) ===
     function updatePDFList(pdfFiles) {
         if (!pdfFiles || pdfFiles.length === 0) {
-             pdfListDiv.innerHTML = '<p class="info-text">Chưa có file nào.</p>';
+             pdfListDiv.innerHTML = '<p class="info-text">Chưa có file nào trong đoạn chat này.</p>';
              selectedPDFs.clear();
              return;
         }
@@ -165,133 +127,112 @@ document.addEventListener("DOMContentLoaded", () => {
             div.className = "pdf-item"; 
 
             const leftSpan = document.createElement("span");
-            const checkbox = document.createElement("input");
-            checkbox.type = "checkbox"; 
-            checkbox.value = fileName; 
-            checkbox.checked = true; 
-            
-            checkbox.addEventListener("change", (e) => {
-                if (e.target.checked) selectedPDFs.add(fileName);
-                else selectedPDFs.delete(fileName);
-            });
-            
-            leftSpan.appendChild(checkbox);
-            leftSpan.appendChild(document.createTextNode(` ${fileName}`));
+            leftSpan.textContent = fileName; // Không cần checkbox nữa vì mặc định chat với tất cả file trong session
             
             const deleteBtn = document.createElement("button");
             deleteBtn.className = "delete-file-btn";
             deleteBtn.innerHTML = "✕"; 
             deleteBtn.onclick = async () => {
-                if (!confirm(`Bạn muốn hủy file "${fileName}"?`)) return;
+                if (!confirm(`Gỡ file "${fileName}" khỏi cuộc trò chuyện này?`)) return;
                 try {
                     await fetch('/remove_file', {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ filename: fileName })
+                        body: JSON.stringify({ 
+                            filename: fileName,
+                            session_id: currentSessionId // Gửi ID để xóa đúng chỗ
+                        })
                     });
-                    selectedPDFs.delete(fileName);
-                    div.remove();
-                    if (pdfListDiv.children.length === 0) {
-                        pdfListDiv.innerHTML = '<p class="info-text">Chưa có file nào.</p>';
-                    }
+                    // Reload list
+                    loadUploadedFiles(currentSessionId);
                 } catch (e) { console.error("Delete error", e); }
             };
 
             div.appendChild(leftSpan);
             div.appendChild(deleteBtn);
             pdfListDiv.appendChild(div);
-            selectedPDFs.add(fileName);
         });
     }
 
-    // === LOGIC: CHUYỂN SESSION, XÓA SESSION, LOAD CHAT, GỬI TIN ===
-    function switchSession(sessionId) {
-        if (currentSessionId === sessionId) return; 
-        currentSessionId = sessionId;
-        localStorage.setItem("current_session_id", currentSessionId);
-        loadChatContent(sessionId);
-        loadSidebarSessions(); 
+    // === CÁC HÀM CƠ BẢN KHÁC (Sidebar, Chat, Clean...) ===
+    
+    async function loadSidebarSessions() {
+        try {
+            const res = await fetch('/get_sessions');
+            const sessions = await res.json();
+            chatHistoryList.innerHTML = "";
+            sessions.forEach(sess => {
+                const item = document.createElement("div");
+                item.className = `history-item ${sess.session_id === currentSessionId ? 'active' : ''}`;
+                const titleSpan = document.createElement("span");
+                titleSpan.textContent = sess.title || "Cuộc trò chuyện mới";
+                item.appendChild(titleSpan);
+                const delBtn = document.createElement("button");
+                delBtn.className = "delete-chat-btn";
+                delBtn.innerHTML = "×";
+                delBtn.onclick = (e) => { e.stopPropagation(); deleteSession(sess.session_id); };
+                item.appendChild(delBtn);
+                item.onclick = () => switchSession(sess.session_id);
+                chatHistoryList.appendChild(item);
+            });
+        } catch (err) { console.error(err); }
     }
 
     async function deleteSession(sessionId) {
-        if (!confirm("Bạn có chắc muốn xóa cuộc trò chuyện này?")) return;
-        
+        if (!confirm("Xóa vĩnh viễn cuộc trò chuyện này?")) return;
         await fetch('/delete_session', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
+            method: 'POST', headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ session_id: sessionId })
         });
-
-        if (sessionId === currentSessionId) {
-            handleNewChat();
-        } else {
-            loadSidebarSessions();
-        }
+        if (sessionId === currentSessionId) handleNewChat();
+        else loadSidebarSessions();
     }
 
     async function loadChatContent(sessionId) {
-        chatMessages.innerHTML = ""; 
-        chatHistory = []; 
-        
+        chatMessages.innerHTML = ""; chatHistory = [];
         try {
             const res = await fetch(`/get_history?session_id=${sessionId}`);
             const historyData = await res.json();
-
             historyData.forEach(msg => {
                 addMessageToChat(msg.content.replace(/\n/g, '<br>'), msg.role === 'user' ? 'user' : 'bot');
-                const rolePrefix = msg.role === 'user' ? 'User: ' : 'Bot: ';
-                chatHistory.push(rolePrefix + msg.content);
+                chatHistory.push((msg.role === 'user' ? 'User: ' : 'Bot: ') + msg.content);
             });
-        } catch (err) {
-            console.error("Failed to load chat content:", err);
-        }
+        } catch (err) { console.error(err); }
     }
 
     async function sendMessage() {
         const question = userInput.value.trim();
         if (!question) return;
-
         addMessageToChat(question, "user");
-        userInput.value = ""; 
-        chatHistory.push(`User: ${question}`);
+        userInput.value = ""; chatHistory.push(`User: ${question}`);
         thinkingIndicator.style.display = "block";
-
         try {
             const response = await fetch('/chat', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
+                method: 'POST', headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
                     question: question,
-                    selected_pdfs: Array.from(selectedPDFs),
-                    history: chatHistory.join("\n"),
-                    session_id: currentSessionId 
+                    session_id: currentSessionId // Chỉ cần gửi session ID, backend tự tìm file
                 })
             });
-
             const data = await response.json();
-            
             chatHistory.push(`Bot: ${data.response}`);
             addMessageToChat(data.response.replace(/\n/g, '<br>'), "bot");
-
-            loadSidebarSessions(); // Reload tiêu đề nếu là chat mới
-
-        } catch (error) {
-            console.error("Chat error:", error);
-            addMessageToChat("Sorry, an error occurred.", "bot");
-        } finally {
-            thinkingIndicator.style.display = "none";
-        }
+            loadSidebarSessions();
+        } catch (error) { addMessageToChat("Lỗi hệ thống.", "bot"); } 
+        finally { thinkingIndicator.style.display = "none"; }
     }
     
     function addMessageToChat(message, sender) {
-        const messageBubble = document.createElement("div");
-        messageBubble.className = `message-bubble ${sender}`;
-        messageBubble.innerHTML = message; 
-        chatMessages.appendChild(messageBubble);
+        const div = document.createElement("div"); div.className = `message-bubble ${sender}`;
+        div.innerHTML = message; chatMessages.appendChild(div);
         chatMessages.scrollTop = chatMessages.scrollHeight;
     }
 
-    // === EVENTS ===
+    async function handleCleanData() { // Nút Reset All Hệ Thống
+        if (!confirm("CẢNH BÁO: Xóa TOÀN BỘ dữ liệu của TẤT CẢ các phiên chat?")) return;
+        try { await fetch('/clean', { method: 'POST' }); location.reload(); } catch(e) {}
+    }
+
     newChatBtn.addEventListener("click", handleNewChat);
     uploadButton.addEventListener("click", handleUpload);
     if (cleanButton) cleanButton.addEventListener("click", handleCleanData);
