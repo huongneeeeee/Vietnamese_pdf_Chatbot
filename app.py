@@ -194,4 +194,4 @@ def clean_data_endpoint():
 if __name__ == "__main__":
     os.makedirs("vectorstores", exist_ok=True)
     os.makedirs("original_text", exist_ok=True)
-    app.run(debug=True, port=5000)
+    app.run(debug=True, port=5001)

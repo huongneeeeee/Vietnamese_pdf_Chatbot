@@ -309,20 +309,34 @@ body {
     overflow-y: auto;
 }
 
+Vấn đề này xảy ra do tiêu đề cuộc trò chuyện quá dài, và trong CSS hiện tại chưa có thuộc tính để "cắt bớt" chữ khi nó vượt quá chiều rộng của thanh sidebar. Điều này khiến dòng chữ đẩy nút "x" trôi ra khỏi màn hình.
+
+Để khắc phục và làm cho giao diện đẹp hơn (tự động hiện dấu "..." khi tên quá dài), bạn hãy mở file static/style.css và thêm/sửa đoạn code CSS cho class .history-item như sau:
+
+Cập nhật static/style.css
+Bạn tìm class .history-item và thay thế (hoặc sửa) thành đoạn code dưới đây:
+
+CSS
+
+/* --- SỬA LỖI HIỂN THỊ LỊCH SỬ CHAT --- */
+
 .history-item {
     padding: 10px 15px;
-    margin-bottom: 5px;
+    margin-bottom: 8px; /* Tăng khoảng cách một chút cho thoáng */
     cursor: pointer;
     border-radius: 18px;
     color: #333;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    transition: background 0.2s;
+    background-color: rgba(255, 255, 255, 0.5); /* Màu nền nhẹ */
+    
+    /* Flexbox để căn chỉnh hàng ngang */
     display: flex;
-    justify-content: space-between;
     align-items: center;
-    font-size: 14px;
+    justify-content: space-between;
+    
+    /* Giới hạn chiều rộng */
+    max-width: 100%;
+    box-sizing: border-box;
+    transition: background 0.2s;
 }
 
 .history-item:hover {
@@ -333,18 +347,39 @@ body {
     background-color: #d0eefc;
     color: #005A9C;
     font-weight: 600;
+    border: 1px solid #B3EBF2;
 }
 
+/* Xử lý phần tên tiêu đề (Span) */
+.history-item span {
+    flex: 1;                 /* Chiếm toàn bộ khoảng trống còn lại */
+    white-space: nowrap;     /* Bắt buộc chữ nằm trên 1 dòng */
+    overflow: hidden;        /* Ẩn phần chữ bị tràn */
+    text-overflow: ellipsis; /* Thêm dấu "..." vào cuối nếu chữ quá dài */
+    margin-right: 10px;      /* Tạo khoảng cách với nút xóa */
+    min-width: 0;            /* Quan trọng: Giúp Flexbox co lại đúng cách */
+}
+
+/* Xử lý nút Xóa (dấu x) */
 .delete-chat-btn {
+    flex-shrink: 0;          /* Đảm bảo nút xóa KHÔNG BAO GIỜ bị co nhỏ */
     background: none;
     border: none;
     color: #999;
     cursor: pointer;
-    font-size: 12px;
-    padding: 4px;
+    font-size: 16px;         /* Tăng kích thước một chút cho dễ bấm */
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    transition: color 0.2s, background 0.2s;
 }
+
 .delete-chat-btn:hover {
     color: #ff4444;
+    background-color: rgba(255, 0, 0, 0.1); /* Hiệu ứng nền đỏ nhạt khi di chuột */
 }
 
 .divider {
