@@ -1,0 +1,147 @@
+[
+  {
+    "timestamp": "2025-11-19 21:20:58",
+    "question": "tóm tắt file practice.pdf",
+    "answer": "📝 **BẢN TÓM TẮT THEO YÊU CẦU:**\n**Nguồn:** Practice.pdf (Trang 5), Practice.pdf (Trang 1), Practice.pdf (Trang 4), Practice.pdf (Trang 3), Practice.pdf (Trang 2)\n\nHere is a detailed summary of the practice questions on NLP Tokenizer:\n\n**Level 1: Basic Concepts**\n\n1. Simple Word Tokenization: Write a Python function to tokenize a sentence into words using.\n2. Character Tokenization: Create a function that converts text into character-level tokens, including spaces.\n3. Whitespace vs Punctuation: Compare the outputs of whitespace tokenization vs. word tokenization that handles punctuation.\n\n**Level 2: Library-Based Tokenization**\n\n4. NLTK Tokenizers: Write code to tokenize the following text using a) split() method, b) Regular expressions, and c) NLTK's word_tokenize() word_tokenize() Text:\"Dr. Smith works at A.I. Corp. She loves NLP! Does she?\"\n5. spaCy Tokenization: Use spaCy to tokenize and identify Text:\"The runners are running faster than expected.\"\n6. Handling Contractions: Write a function to properly tokenize contractions. Input:\"I'm doesn't can't won't\" Challenge: Should \"I'm\" become ['I', 'am'] or [\"I'm\"]?\n\n**Level 3: Subword Tokenization**\n\n7. Byte Pair Encoding (BPE): Implement a simple BPE tokenizer from scratch that: Input:[\"low\", \"lower\", \"lowest\", \"newer\", \"wider\"] Iterations: 10 merges\n8. Hugging Face Tokenizers: Use transformers library to tokenize with: sent_tokenize() RegexpTokenizer Tokens Lemmas Part-of-speech tags . Starts with character-level tokens . Merges the most frequent pair iteratively Text:\"Tokenization is fundamental!\" Task: Compare vocabulary handling and special tokens\n9. WordPiece Tokenization: Tokenize the following using BERT's WordPiece: Input:\"unhappiness\" Expected:['un', '##hap', '##pi', '##ness']\n\n**Level 4: Advanced Challenges**\n\n10. Custom Tokenizer Class: Create a CustomTokenizer class with methods:\n11. Handling Multiple Languages: Write a tokenizer that correctly handles: Hint: Use language-specific tokenizers BERT tokenizer GPT-2 tokenizer T5 tokenizer fit(corpus) - builds vocabulary tokenize(text) - tokenizes text vocab_size() - returns vocabulary size encode(text) - converts to token IDs decode(ids) - converts IDs back to text English: \"Hello world\" Chinese: \" 你好世界 \" Mixed: \"Hello 世界 \"\n\n**Level 5: Performance & Edge Cases**\n\n12. Token Normalization: Implement a pipeline that: Input:\"The quick brown foxes are jumping over the lazy dogs!\"\n13. Tokenization Speed Benchmark: Compare the speed of different tokenizers on a large corpus (100K sentences):\n14. Vocabulary Size Optimization: Given a corpus, implement a function that:\n15. Special Tokens Handling: Create a tokenizer that properly handles: . Converts to lowercase . Removes punctuation . Tokenizes . Removes stopwords . Applies stemming/lemmatization str.split() NLTK spaCy Hugging Face Fast Tokenizers Creates vocabularies of different sizes (1K, 5K, 10K, 50K) Calculates out-of-vocabulary (OOV) rate for each Plots vocab size vs. OOV rate URLs: \"Visit https://example.com\" Emails: \"contact@email.com\" Hashtags: \"#NLP #DeepLearning\"\n\n**Bonus: Real-World Application**\n\n16. Sentiment Analysis Preprocessing: Build a complete tokenization pipeline for sentiment analysis: Test on: Amazon reviews dataset\n17. Build a Tokenizer Comparison Tool: Create a function that compares multiple tokenizers side-by-side: Mentions: \"@username\" Emojis: \"I love NLP 😊🚀 \" . Clean HTML tags . Handle negations (n't, not) . Preserve emoticons . Create bigrams for important phrases . Pad sequences to fixed length",
+    "sources": [
+      "Practice.pdf (Trang 5)",
+      "Practice.pdf (Trang 1)",
+      "Practice.pdf (Trang 4)",
+      "Practice.pdf (Trang 3)",
+      "Practice.pdf (Trang 2)"
+    ]
+  },
+  {
+    "timestamp": "2025-11-20 19:38:49",
+    "question": "tóm tắt nội dung file lab3_socket",
+    "answer": "**Tóm tắt nội dung file lab3_socket**\n\nFile lab3_socket là một bài thực hành về lập trình socket với kỹ thuật TCP tại Trường Đại học Duy Tân, Khoa Công nghệ Thông tin, Bộ môn CNPM.\n\n**Mục tiêu**\n\nLập trình kết nối giữa 2 máy tính bằng socket với kỹ thuật TCP.\n\n**Nội dung**\n\n* Socket và dịch vụ TCP: Socket là cửa giao tiếp giữa các tiến trình trên 2 hay nhiều máy tính với nhau thông qua các (UDP hoặc TCP). Để kết nối qua Socket bằng kỹ thuật TCP, dữ liệu truyền dạng dòng bytes hoặc chuỗi.\n* Tương tác client/server qua TCP socket: Client phải gửi yêu cầu tới server, server phải mở socket để nhận yêu cầu từ client.\n\n**Bài tập**\n\n* Viết chương trình trao đổi thông điệp giữa 2 máy tính qua Socket TCP.\n* Viết chương trình đọc một chuỗi từ Client gởi đến Server, sau khi nhận được chuỗi Server thực hiện biến chữ thường thành chữ hoa và gởi kết quả trả cho Client.\n* Viết chương trình hiển thị chuỗi đảo ngược trên màn hình Client theo giao thức TCP.\n* Viết chương trình tính tổng S:= 1+2+….+ n và hiển thị tổng trên màn hình Client bằng giao thức TCP.\n* Viết chương trình tính tổng dãy số nguyên và hiển thị kết quả trên màn hình Client.\n\n**Mở rộng**\n\n* Cho biết bộ 3 số nguyên nào trong dãy trên có thể làm thành 3 cạnh của một tam giác. Viết chương trình tìm kiếm và hiển thị kết quả trên màn hình Client.",
+    "sources": [
+      "lab3_socket_TCP_updated.docx",
+      "lab3_socket_TCP_updated.docx",
+      "lab3_socket_TCP_updated.docx"
+    ]
+  },
+  {
+    "timestamp": "2025-11-20 19:40:40",
+    "question": "ma trận quay là gì",
+    "answer": "**Ma trận quay là một ma trận biểu diễn hướng của một hệ tọa độ không gian được tạo bởi các vecto đơn vị của hệ tọa độ đó.**\n\nMa trận quay là một khái niệm quan trọng trong lĩnh vực toán học và kỹ thuật, đặc biệt là trong lĩnh vực mô hình hóa và mô phỏng chuyển động của các hệ thống cơ khí, robot công nghiệp, và các hệ thống khác.\n\n**Cấu trúc của ma trận quay**\n\nMa trận quay là một ma trận 3x3, được biểu diễn dưới dạng:\n\n```\n| a  b  c |\n| d  e  f |\n| g  h  i |\n```\n\nTrong đó, a, b, c, d, e, f, g, h, i là các số thực.\n\n**Tính chất của ma trận quay**\n\nMa trận quay có các tính chất sau:\n\n* Ma trận quay là một ma trận đơn vị, tức là ma trận nhân với chính nó sẽ cho ra ma trận đơn vị.\n* Ma trận quay có thể được nhân với nhau để tạo ra một ma trận quay khác.\n* Ma trận quay có thể được sử dụng để biểu diễn chuyển động của một hệ thống cơ khí hoặc robot công nghiệp.\n\n**Cách xác định ma trận quay**\n\nMa trận quay có thể được xác định bằng cách sử dụng các phương pháp sau:\n\n* Phương pháp Euler: sử dụng các góc Euler để xác định ma trận quay.\n* Phương pháp Cardan: sử dụng các góc Cardan để xác định ma trận quay.\n* Phương pháp trực tiếp: sử dụng các thông số của hệ thống cơ khí hoặc robot công nghiệp để xác định ma trận quay.\n\n**Ứng dụng của ma trận quay**\n\nMa trận quay có nhiều ứng dụng trong các lĩnh vực sau:\n\n* Mô hình hóa và mô phỏng chuyển động của các hệ thống cơ khí và robot công nghiệp.\n* Xác định vị trí và hướng của các hệ thống cơ khí và robot công nghiệp.\n* Tính toán chuyển động của các hệ thống cơ khí và robot công nghiệp.\n\nTrên đây là một số thông tin cơ bản về ma trận quay. Nếu bạn có bất kỳ câu hỏi nào khác, xin vui lòng hỏi!",
+    "sources": [
+      "870265646-De-Cuong-on-Tap-Robot-1.pdf",
+      "870265646-De-Cuong-on-Tap-Robot-1.pdf",
+      "870265646-De-Cuong-on-Tap-Robot-1.pdf",
+      "lab3_socket_TCP_updated.docx"
+    ]
+  },
+  {
+    "timestamp": "2025-11-20 19:56:20",
+    "question": "what is ma trận quay",
+    "answer": "Ma trận quay là một ma trận biểu diễn hướng của 1 hệ tọa độ không gian được tạo bởi các vecto đơn vị của hệ tọa độ đó. Là 1 ma trận gồm 9 thành phần, đặc trưng cho hướng của hệ tọa độ vật so với hệ tọa độ cố định.",
+    "sources": [
+      "870265646-De-Cuong-on-Tap-Robot-1.pdf",
+      "870265646-De-Cuong-on-Tap-Robot-1.pdf",
+      "870265646-De-Cuong-on-Tap-Robot-1.pdf",
+      "lab3_socket_TCP_updated.docx"
+    ]
+  },
+  {
+    "timestamp": "2025-11-20 19:57:01",
+    "question": "what is rotation matrix",
+    "answer": "A rotation matrix is a matrix that represents the orientation of a coordinate system in 3D space, created by the unit vectors of that coordinate system. It is a 9-element matrix that characterizes the orientation of the coordinate system with respect to the fixed coordinate system.",
+    "sources": [
+      "870265646-De-Cuong-on-Tap-Robot-1.pdf",
+      "870265646-De-Cuong-on-Tap-Robot-1.pdf",
+      "870265646-De-Cuong-on-Tap-Robot-1.pdf",
+      "lab3_socket_TCP_updated.docx"
+    ]
+  },
+  {
+    "timestamp": "2025-11-20 19:59:51",
+    "question": "tóm tắt câu chuyện \"The first snow\"",
+    "answer": "This information is not found in the provided documents.",
+    "sources": [
+      "100 truyện ngắn_Ms Hoa Giao tiếp.pdf",
+      "100 truyện ngắn_Ms Hoa Giao tiếp.pdf",
+      "100 truyện ngắn_Ms Hoa Giao tiếp.pdf"
+    ]
+  },
+  {
+    "timestamp": "2025-11-20 20:00:20",
+    "question": "tóm tắt câu chuyện \"The first song\"",
+    "answer": "Câu chuyện \"The First Song\" kể về một cô bé đang đi xe ô tô cùng bố. Bố bật radio và một bài hát bắt đầu phát. Cô bé nhảy chân và nghiêng đầu. Bố cười và thích bài hát đó. Khi bài hát kết thúc, radio phát một bài hát khác mà cô bé không thích. Cô bé im lặng và ngồi yên.",
+    "sources": [
+      "100 truyện ngắn_Ms Hoa Giao tiếp.pdf",
+      "100 truyện ngắn_Ms Hoa Giao tiếp.pdf",
+      "100 truyện ngắn_Ms Hoa Giao tiếp.pdf"
+    ]
+  },
+  {
+    "timestamp": "2025-11-20 20:01:57",
+    "question": "represent the story \"Visiting the doctor\"",
+    "answer": "Câu chuyện \"Visiting the Doctor\" kể về Haley, cô bé cảm thấy nóng. Mẹ Haley chạm vào trán Haley và phát hiện Haley có sốt. Mẹ Haley đưa Haley đến bệnh viện. Bác sĩ là người thân thiện. Bác sĩ cho Haley một con tem. Bác sĩ nói Haley phải uống một viên thuốc và uống nhiều nước. Haley về nhà và làm theo. Haley làm như vậy trong ba ngày và trở lại khỏe mạnh.",
+    "sources": [
+      "100 truyện ngắn_Ms Hoa Giao tiếp.pdf",
+      "100 truyện ngắn_Ms Hoa Giao tiếp.pdf",
+      "100 truyện ngắn_Ms Hoa Giao tiếp.pdf"
+    ]
+  },
+  {
+    "timestamp": "2025-11-20 20:02:13",
+    "question": "trả lời bằng tiếng anh",
+    "answer": "I'm ready to assist you. Please go ahead and ask your question, and I'll respond in English.",
+    "sources": [
+      "100 truyện ngắn_Ms Hoa Giao tiếp.pdf",
+      "100 truyện ngắn_Ms Hoa Giao tiếp.pdf",
+      "100 truyện ngắn_Ms Hoa Giao tiếp.pdf"
+    ]
+  },
+  {
+    "timestamp": "2025-11-20 20:10:00",
+    "question": "summary of the story the corner",
+    "answer": "Jill does not like math. She starts talking about food, and her friends laugh. The teacher is upset and tells them to stand in the corner. Jill goes to the corner and thinks about her family and her dog. Five minutes pass, and the teacher lets her go.",
+    "sources": [
+      "100 truyện ngắn_Ms Hoa Giao tiếp.pdf",
+      "100 truyện ngắn_Ms Hoa Giao tiếp.pdf",
+      "100 truyện ngắn_Ms Hoa Giao tiếp.pdf"
+    ]
+  },
+  {
+    "timestamp": "2025-11-20 20:10:18",
+    "question": "tóm tắt câu chuyện the corner",
+    "answer": "tóm tắt câu chuyện the Corner: Jill không thích toán. Cô bắt đầu nói về thức ăn, và bạn bè của cô cười. Giáo viên không hài lòng và nói với họ phải đứng ở góc. Jill đi đến góc và nghĩ về gia đình và chó của cô. Năm phút trôi qua, giáo viên cho phép cô đi.",
+    "sources": [
+      "100 truyện ngắn_Ms Hoa Giao tiếp.pdf",
+      "100 truyện ngắn_Ms Hoa Giao tiếp.pdf",
+      "100 truyện ngắn_Ms Hoa Giao tiếp.pdf"
+    ]
+  },
+  {
+    "timestamp": "2025-11-20 20:11:40",
+    "question": "Jill thích ăn gì, trả lời bằng tiếng anh",
+    "answer": "This information is not found in the provided documents.",
+    "sources": [
+      "100 truyện ngắn_Ms Hoa Giao tiếp.pdf",
+      "100 truyện ngắn_Ms Hoa Giao tiếp.pdf",
+      "100 truyện ngắn_Ms Hoa Giao tiếp.pdf"
+    ]
+  },
+  {
+    "timestamp": "2025-11-20 20:12:24",
+    "question": "Jill thích cái gì? trả lời bằng tiếng anh",
+    "answer": "Jill does not like math.",
+    "sources": [
+      "100 truyện ngắn_Ms Hoa Giao tiếp.pdf",
+      "100 truyện ngắn_Ms Hoa Giao tiếp.pdf",
+      "100 truyện ngắn_Ms Hoa Giao tiếp.pdf"
+    ]
+  },
+  {
+    "timestamp": "2025-11-20 20:48:23",
+    "question": "Jill không thích gì",
+    "answer": "Xin lỗi, đã có lỗi xảy ra khi xử lý yêu cầu.",
+    "sources": [
+      "100 truyện ngắn_Ms Hoa Giao tiếp.pdf",
+      "100 truyện ngắn_Ms Hoa Giao tiếp.pdf",
+      "100 truyện ngắn_Ms Hoa Giao tiếp.pdf"
+    ]
+  }
+]

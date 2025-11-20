@@ -1,0 +1,20 @@
+# === Bảo mật API Keys ===
+# Không bao giờ đẩy file .env chứa API Key
+*.env
+.env
+
+# === Dữ liệu Vector & PDF ===
+# Các thư mục này chứa dữ liệu người dùng và index,
+# chúng sẽ được tạo lại khi chạy, không nên đẩy lên repo.
+vectorstores/
+original_text/
+
+# === File Cache của Python ===
+__pycache__/
+*.pyc
+*.pyo
+
+# === File hệ thống/Editor ===
+.vscode/
+.idea/
+.DS_Store
