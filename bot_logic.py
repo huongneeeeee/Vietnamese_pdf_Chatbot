@@ -52,7 +52,7 @@ class chatBotMode:
                 docs_scores = first_db.similarity_search_with_score("giới thiệu", k=3) # Tìm đoạn giới thiệu
                 results.extend([(doc, 0.0, "Fallback") for doc, score in docs_scores])
             else:
-                 return "Tôi không tìm thấy thông tin nào đủ liên quan (điểm tương đồng thấp) để trả lời.", ""
+                 return "Tôi không tìm thấy thông tin nào đủ liên quan trong file bạn upload để trả lời.", ""
 
         # Lấy 3 đoạn tốt nhất
         top_docs = sorted(results, key=itemgetter(1))[:3]
