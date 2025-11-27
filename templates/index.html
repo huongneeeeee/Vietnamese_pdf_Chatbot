@@ -3,11 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ChatWithUPDF (Gemini Style)</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <title>ChatWithUPDF</title>
+    <!-- Icon -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <!-- CSS (Thêm ?v=4.0 để xóa cache cũ) -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}?v=4.0">
 </head>
 <body>
+
+    <!-- THANH BÊN (SIDEBAR) -->
     <div class="sidebar">
         <div class="sidebar-header">
             <button id="new-chat-btn" class="new-chat-btn">
@@ -15,47 +19,65 @@
             </button>
         </div>
 
-        <div class="sidebar-section">
-            <h4 class="section-title">Lịch sử trò chuyện</h4>
+        <div class="sidebar-content">
+            <!-- Phần Lịch sử -->
+            <div class="section-title">Lịch sử</div>
             <div id="chat-history-list" class="history-list">
-                </div>
-        </div>
+                <!-- JS sẽ điền lịch sử vào đây -->
+            </div>
 
-        <div class="divider"></div>
+            <div class="divider"></div>
 
-        <div class="sidebar-section">
-            <h4 class="section-title">Quản lý File Upload</h4>
+            <!-- Phần Upload -->
+            <div class="section-title">Tài liệu</div>
+            
             <input type="file" id="pdf-uploader" multiple accept=".pdf, .docx, .txt">
-            <button id="upload-button">Upload & Process</button>
+            
+            <button id="upload-button">
+                <i class="fas fa-cloud-upload-alt"></i> Tải lên & Xử lý
+            </button>
+            
             <div id="upload-spinner" class="spinner" style="display: none;"></div>
             <div id="upload-status"></div>
             
+            <!-- Danh sách file (Có Checkbox) -->
             <div id="pdf-list">
                 <p class="info-text">Chưa có file nào.</p>
             </div>
         </div>
     </div>
 
+    <!-- KHUNG CHAT -->
     <div class="chat-container">
         <div class="chat-header">
             <h3>Chatbot RAG</h3>
-            <button id="clean-button" title="Xóa toàn bộ dữ liệu"><i class="fas fa-trash"></i> Reset All</button>
+            <button id="clean-button" title="Xóa toàn bộ dữ liệu server">
+                <i class="fas fa-trash-alt"></i> Reset All
+            </button>
         </div>
         
+        <!-- Tin nhắn -->
         <div id="chat-messages" class="chat-messages"></div>
 
-        <div id="thinking-indicator" style="display: none;">
-            <div class="message-bubble bot">
-                <div class="spinner-dots"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div>
+        <!-- Hiệu ứng Thinking -->
+        <div id="thinking-indicator" style="display: none; padding: 0 10% 20px;">
+            <div class="message-bubble bot" style="width: fit-content;">
+                <div class="spinner-dots">
+                    <div class="dot"></div><div class="dot"></div><div class="dot"></div>
+                </div>
             </div>
         </div>
 
+        <!-- Nhập liệu -->
         <div class="chat-input-area">
-            <input type="text" id="user-input" placeholder="Nhập câu hỏi của bạn...">
-            <button id="send-button"><i class="fas fa-paper-plane"></i></button>
+            <div class="input-wrapper">
+                <input type="text" id="user-input" placeholder="Hỏi gì đó về tài liệu..." autocomplete="off">
+                <button id="send-button"><i class="fas fa-paper-plane"></i></button>
+            </div>
         </div>
     </div>
 
-    <script src="{{ url_for('static', filename='script.js') }}"></script>
+    <!-- Javascript (Thêm ?v=4.0 để xóa cache cũ) -->
+    <script src="{{ url_for('static', filename='script.js') }}?v=4.0"></script>
 </body>
 </html>

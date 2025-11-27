@@ -5,69 +5,60 @@ from langchain_core.output_parsers import StrOutputParser
 from langchain_openai import ChatOpenAI 
 
 # --- 1. CẤU HÌNH MÔI TRƯỜNG & API KEY ---
-# Load biến môi trường từ file .env
 load_dotenv()
-
-# [THAY ĐỔI] Lấy Key của Groq
 GROQ_API_KEY = os.getenv("GROQ_API_KEY")
 
-# Kiểm tra API Key 
 if not GROQ_API_KEY:
     print("⚠️ CẢNH BÁO: Không tìm thấy GROQ_API_KEY trong file .env")
 
-# [THAY ĐỔI] Tên mô hình của Groq
-# Các model phổ biến của Groq:
-# - "llama3-8b-8192" (Nhanh, nhẹ, tương đương model cũ của bạn)
-# - "llama3-70b-8192" (Thông minh hơn, nhưng nặng hơn)
-# - "mixtral-8x7b-32768" (Cửa sổ ngữ cảnh lớn)
-
 MODEL_NAME = "llama-3.3-70b-versatile"
+
 # --- 2. CẤU HÌNH MODEL ---
 generation_config = {
-  "temperature": 0.1, # Groq thường cần temp thấp để ổn định
-  "max_tokens": 1000,
+  "temperature": 0.3, # Tăng nhẹ để văn phong tự nhiên hơn khi tóm tắt
+  "max_tokens": 1500, # Tăng token để trả lời dài hơn khi tổng hợp
 }
 
-# --- 3. PROMPT TEMPLATE CHO RAG ---
-# (Giữ nguyên Prompt tiếng Việt cưỡng chế mà chúng ta đã tối ưu)
+# --- 3. PROMPT TEMPLATE (TỐI ƯU CHO TỔNG HỢP & TIẾNG VIỆT) ---
 custom_prompt_template = """
-Bạn là một trợ lý RAG (Retrieval-Augmented Generation) thông minh. Nhiệm vụ của bạn là hỗ trợ người dùng dựa trên tài liệu được cung cấp.
+Bạn là một trợ lý AI chuyên nghiệp, chuyên hỗ trợ người dùng Việt Nam tổng hợp và tra cứu thông tin từ tài liệu.
 
-QUY TẮC QUAN TRỌNG NHẤT (BẮT BUỘC TUÂN THỦ):
-1. NGÔN NGỮ: Câu trả lời phải HOÀN TOÀN BẰNG TIẾNG VIỆT. Nếu tài liệu là tiếng Anh, hãy dịch ý hiểu và trả lời bằng tiếng Việt.
-2. CHỈ dùng Context: Chỉ trả lời dựa trên thông tin trong Context. Không bịa đặt.
-3. Xử lý khi không tìm thấy: Nếu không có thông tin trong Context, hãy trả lời: "Tôi không tìm thấy thông tin này trong tài liệu."
+Dưới đây là các đoạn thông tin (Context) được trích xuất từ các tài liệu khác nhau:
+---------------------
+{context}
+---------------------
 
-History: {history_global}
+Lịch sử chat:
+{history_global}
 
-Context: {context}
+Câu hỏi của người dùng: 
+{question}
 
-Question: {question}
-(Lưu ý: Hãy trả lời câu hỏi trên bằng tiếng Việt chi tiết và rõ ràng)
+NHIỆM VỤ CỦA BẠN (BẮT BUỘC TUÂN THỦ):
+1. **NGÔN NGỮ:** CÂU TRẢ LỜI PHẢI 100% BẰNG TIẾNG VIỆT. Dù câu hỏi là tiếng Anh hay ngôn ngữ nào khác, bạn vẫn phải trả lời bằng tiếng Việt.
+2. **TỔNG HỢP:** Nếu thông tin nằm rải rác ở nhiều đoạn văn hoặc nhiều file khác nhau, hãy xâu chuỗi chúng lại thành một câu trả lời mạch lạc, logic. Đừng chỉ liệt kê rời rạc.
+3. **HIỂU Ý:** Nếu câu hỏi quá ngắn (ví dụ: "tóm tắt", "summary"), hãy hiểu là người dùng muốn tóm tắt nội dung chính của các tài liệu được cung cấp.
+4. **TRUNG THỰC:** Chỉ dùng thông tin trong Context. Nếu không tìm thấy thông tin, hãy trả lời: "Xin lỗi, tôi không tìm thấy thông tin này trong các tài liệu bạn đã chọn."
 
-Câu trả lời:
+Câu trả lời (Tiếng Việt):
 """
 
 def set_custom_prompt():
-  prompt = PromptTemplate(template=custom_prompt_template,
-                          input_variables=['history_global','context', 'question'])
-  return prompt
+  return PromptTemplate(template=custom_prompt_template, input_variables=['history_global','context', 'question'])
 
 # --- 4. LỚP BOT ---
-class OpenRouterRAGBot: # Tên class giữ nguyên để không phải sửa file khác
+class OpenRouterRAGBot: 
     def __init__(self):
         if not GROQ_API_KEY:
             self.chain = None
             return
 
-        # [THAY ĐỔI] Cấu hình kết nối sang Groq
         self.model = ChatOpenAI(
             model=MODEL_NAME,
             api_key=GROQ_API_KEY,
-            base_url="https://api.groq.com/openai/v1", # URL của Groq
+            base_url="https://api.groq.com/openai/v1",
             temperature=generation_config["temperature"],
             max_tokens=generation_config["max_tokens"],
-            # Groq không cần default_headers như OpenRouter, nên bỏ đi cũng được
         )
         
         self.prompt = set_custom_prompt()

@@ -1,475 +1,199 @@
-/* --- TỔNG THỂ --- */
+/* --- CẤU HÌNH CHUNG --- */
+:root {
+    --primary: #005A9C;
+    --primary-light: #E3F2FD;
+    --bg-sidebar: #F8F9FA;
+    --bg-chat: #FFFFFF;
+    --text-main: #333;
+    --text-sub: #666;
+    --danger: #FF5252;
+    --border: #E0E0E0;
+}
+
+* { box-sizing: border-box; }
+
 body {
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
     margin: 0;
     display: flex;
     height: 100vh;
-    background-color: #FFFFFF;
+    background-color: var(--bg-chat);
+    color: var(--text-main);
+    overflow: hidden;
 }
 
 /* --- SIDEBAR --- */
 .sidebar {
-    width: 300px;
-    background-color: #B3EBF2; /* Màu xanh của bạn */
+    width: 320px;
+    background-color: var(--bg-sidebar);
     display: flex;
     flex-direction: column;
-    border-right: 1px solid #cce8ed;
-    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.05); /* --- Đổ bóng nhẹ cho Sidebar --- */
-}
-.sidebar-header {
-    padding: 20px;
-    border-bottom: 1px solid #99ddea;
-}
-.sidebar-header h3 {
-    margin: 0;
-    color: #2F4F4F;
-    /* --- YÊU CẦU CỦA BẠN --- */
-    text-transform: uppercase;
-    font-weight: bold;
-}
-.sidebar-content {
-    padding: 20px;
-    overflow-y: auto;
-    color: #2F4F4F;
+    border-right: 1px solid var(--border);
+    flex-shrink: 0;
 }
 
-/* --- LÀM MỀM THANH CUỘN (Sidebar) --- */
-.sidebar-content::-webkit-scrollbar {
-    width: 8px;
-}
-.sidebar-content::-webkit-scrollbar-track {
-    background: #B3EBF2;
-    border-radius: 10px;
-}
-.sidebar-content::-webkit-scrollbar-thumb {
-    background-color: #005A9C;
-    border-radius: 10px;
-    border: 2px solid #B3EBF2;
-}
+.sidebar-header { padding: 20px; }
 
-/* --- LÀM MỀM NÚT UPLOAD FILE (RẤT QUAN TRỌNG) --- */
-.sidebar-content input[type="file"] {
-    margin-bottom: 15px;
-}
-.sidebar-content input[type="file"]::file-selector-button {
-    background-color: #FFFFFF;
-    color: #005A9C;
-    border: 1px solid #005A9C;
-    border-radius: 8px; /* Bo tròn */
-    padding: 10px 15px;
-    cursor: pointer;
-    transition: background-color 0.2s, box-shadow 0.2s;
-    font-weight: 500;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
-}
-.sidebar-content input[type="file"]::file-selector-button:hover {
-    background-color: #f0f8ff;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-}
-
-.sidebar-content button {
-    width: 100%;
-    padding: 12px; /* Tăng padding */
-    background-color: #005A9C; /* Xanh đậm */
+.new-chat-btn {
+    background-color: var(--primary);
     color: white;
     border: none;
-    border-radius: 8px; /* Bo tròn */
-    cursor: pointer;
-    font-size: 16px;
-    font-weight: bold;
-    box-shadow: 0 2px 5px rgba(0, 90, 156, 0.2);
-    transition: background-color 0.2s, transform 0.1s;
-}
-.sidebar-content button:hover {
-    background-color: #004a80;
-}
-.sidebar-content button:active {
-    transform: scale(0.98); /* Hiệu ứng nhấn */
-}
-.manage-title {
-    margin-top: 30px;
-    border-top: 1px solid #99ddea;
-    padding-top: 20px;
-    /* --- YÊU CẦU CỦA BẠN --- */
-    text-transform: uppercase;
-    font-weight: bold;
-    color: #2F4F4F;
-}
-#pdf-list .info-text {
-    background-color: #EBF5FB;
-    color: #1A5276;
-    border: 1px solid #B3EBF2;
+    border-radius: 10px;
     padding: 12px;
-    border-radius: 8px; /* Bo tròn */
-}
-.pdf-item {
-    display: block;
-    margin-bottom: 10px;
-    font-size: 14px;
-    background: rgba(255, 255, 255, 0.4); /* Hơi trong suốt */
-    padding: 8px 12px;
-    border-radius: 6px;
-}
-.pdf-item input {
-    margin-right: 8px;
-    accent-color: #005A9C; /* Đổi màu checkbox */
-}
-
-/* --- KHUNG CHAT --- */
-.chat-container {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    background-color: #FFFFFF;
-}
-.chat-header {
-    padding: 20px;
-    border-bottom: 1px solid #eee;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-.chat-header h3 {
-    margin: 0;
-    color: #005A9C;
-    /* --- YÊU CẦU CỦA BẠN (IN HOA, IN ĐẬM, TO HƠN) --- */
-    text-transform: uppercase;
-    font-weight: bold;
-    font-size: 1.6rem; /* (25.6px) - Lớn hơn đáng kể */
-}
-#clean-button {
-    background-color: #E0E0E0;
-    color: #333333;
-    border: none;
-    border-radius: 8px; /* Bo tròn */
-    padding: 10px 15px; /* Tăng padding */
+    width: 100%;
+    font-weight: 600;
     cursor: pointer;
-    font-weight: 500;
-    transition: background-color 0.2s;
-}
-#clean-button:hover {
-    background-color: #d0d0d0;
-}
-.chat-messages {
-    flex: 1;
-    padding: 25px; /* Tăng padding */
-    overflow-y: auto;
     display: flex;
-    flex-direction: column;
-    gap: 18px; /* Tăng khoảng cách */
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    transition: 0.2s;
+}
+.new-chat-btn:hover { background-color: #004a80; box-shadow: 0 4px 8px rgba(0,0,0,0.15); }
+
+.sidebar-content {
+    padding: 0 15px 20px;
+    overflow-y: auto;
+    flex: 1;
+}
+.sidebar-content::-webkit-scrollbar { width: 5px; }
+.sidebar-content::-webkit-scrollbar-thumb { background-color: #ccc; border-radius: 10px; }
+
+.section-title {
+    font-size: 12px; font-weight: bold; text-transform: uppercase; color: var(--text-sub);
+    margin: 20px 5px 10px; letter-spacing: 0.5px;
 }
 
-/* --- LÀM MỀM THANH CUỘN (Chat) --- */
-.chat-messages::-webkit-scrollbar {
-    width: 8px;
+.divider { height: 1px; background-color: var(--border); margin: 15px 5px; }
+
+/* --- HISTORY LIST --- */
+.history-item {
+    padding: 10px 12px;
+    margin-bottom: 5px;
+    border-radius: 8px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 14px;
+    transition: 0.2s;
 }
-.chat-messages::-webkit-scrollbar-track {
-    background: #f1f1f1;
-    border-radius: 10px;
+.history-item:hover { background-color: rgba(0,0,0,0.05); }
+.history-item.active { background-color: var(--primary-light); color: var(--primary); font-weight: 600; }
+
+.history-item span {
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis; flex: 1; margin-right: 8px;
 }
-.chat-messages::-webkit-scrollbar-thumb {
-    background-color: #005A9C;
-    border-radius: 10px;
-    border: 2px solid #f1f1f1;
+.delete-chat-btn {
+    background: none; border: none; color: #999; cursor: pointer; font-size: 16px; opacity: 0; transition: 0.2s;
+}
+.history-item:hover .delete-chat-btn { opacity: 1; }
+.delete-chat-btn:hover { color: var(--danger); }
+
+/* --- UPLOAD SECTION --- */
+#pdf-uploader { width: 100%; font-size: 13px; margin-bottom: 10px; }
+#pdf-uploader::file-selector-button {
+    background: white; border: 1px solid #ccc; padding: 5px 10px; border-radius: 5px; cursor: pointer; margin-right: 10px;
+}
+
+#upload-button {
+    width: 100%; padding: 10px; background: white; color: var(--primary); border: 1px solid var(--primary);
+    border-radius: 8px; font-weight: 600; cursor: pointer; transition: 0.2s; margin-bottom: 15px;
+}
+#upload-button:hover { background: var(--primary-light); }
+#upload-button:disabled { border-color: #ccc; color: #999; background: #f9f9f9; }
+
+#upload-status { font-size: 12px; text-align: center; margin-bottom: 10px; min-height: 15px; color: var(--text-sub); }
+
+/* --- FILE LIST (FIX CHECKBOX) --- */
+.pdf-item {
+    display: flex;
+    align-items: center;
+    background: white;
+    padding: 8px 10px;
+    border-radius: 8px;
+    margin-bottom: 8px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    border: 1px solid transparent;
+    transition: 0.2s;
+    gap: 10px; /* Khoảng cách giữa các phần tử */
+}
+.pdf-item:hover { border-color: var(--primary); }
+
+/* Checkbox */
+.pdf-item input[type="checkbox"] {
+    width: 16px; height: 16px; cursor: pointer; accent-color: var(--primary); margin: 0; flex-shrink: 0;
+}
+
+/* Tên File */
+.pdf-item span {
+    font-size: 13px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; flex: 1; color: var(--text-main); margin: 0;
+}
+
+/* Nút Xóa File */
+.delete-file-btn {
+    background: #FFEBEE; color: var(--danger); border: none; width: 24px; height: 24px;
+    border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; flex-shrink: 0;
+}
+.delete-file-btn:hover { background-color: #FFCDD2; }
+
+/* --- CHAT AREA --- */
+.chat-container { flex: 1; display: flex; flex-direction: column; background: var(--bg-chat); }
+
+.chat-header {
+    padding: 15px 25px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center;
+}
+.chat-header h3 { margin: 0; color: var(--primary); font-size: 18px; }
+
+#clean-button {
+    background: transparent; border: 1px solid var(--border); color: var(--text-sub); padding: 5px 10px;
+    border-radius: 6px; font-size: 13px; cursor: pointer; display: flex; gap: 5px; align-items: center;
+}
+#clean-button:hover { color: var(--danger); border-color: var(--danger); background: #FFF5F5; }
+
+.chat-messages {
+    flex: 1; padding: 20px 10%; overflow-y: auto; display: flex; flex-direction: column; gap: 20px;
+    background-image: radial-gradient(#F0F4F8 1px, transparent 1px); background-size: 20px 20px;
 }
 
 .message-bubble {
-    padding: 14px 20px; /* Tăng padding */
-    border-radius: 22px; /* Bo tròn nhiều hơn */
-    max-width: 75%;
-    word-wrap: break-word;
-    line-height: 1.5;
-    /* --- LÀM MỀM: Thêm đổ bóng tinh tế --- */
-    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.05);
+    padding: 12px 18px; border-radius: 15px; max-width: 85%; line-height: 1.5; font-size: 15px;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.05); position: relative; word-wrap: break-word;
 }
-.user {
-    background-color: #005A9C;
-    color: #FFFFFF;
-    align-self: flex-end;
-    border-bottom-right-radius: 8px; /* Bo mềm góc */
-}
-.bot {
-    background-color: #F0F2F6;
-    color: #333333;
-    align-self: flex-start;
-    border-bottom-left-radius: 8px; /* Bo mềm góc */
-}
-.bot strong {
-    color: #004a80;
-}
-.bot pre, .bot code {
-    background-color: #e9eaf0;
-    padding: 10px;
-    border-radius: 8px;
-    overflow-x: auto;
-    font-family: monospace;
-}
+.user { background: var(--primary); color: white; align-self: flex-end; border-bottom-right-radius: 4px; }
+.bot { background: #F5F5F5; color: var(--text-main); align-self: flex-start; border-bottom-left-radius: 4px; border: 1px solid #eee; }
+.bot strong { color: var(--primary); }
 
-/* Input Area */
-.chat-input-area {
-    padding: 20px;
-    border-top: 1px solid #eee;
-    display: flex;
-    gap: 10px;
-    /* --- LÀM MỀM: Thêm bóng đổ cho khu vực nhập --- */
-    box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.03);
+/* --- INPUT AREA --- */
+.chat-input-area { padding: 20px 10%; border-top: 1px solid var(--border); }
+.input-wrapper {
+    display: flex; gap: 10px; background: #F0F2F5; padding: 8px; border-radius: 30px;
+    border: 1px solid transparent; transition: 0.2s;
 }
-#user-input {
-    flex: 1;
-    padding: 14px; /* Tăng padding */
-    border: 1px solid #ccc;
-    border-radius: 10px; /* Bo tròn */
-    font-size: 16px;
-    transition: border-color 0.2s, box-shadow 0.2s;
-}
-#user-input:focus {
-    outline: none;
-    border-color: #005A9C;
-    box-shadow: 0 0 5px rgba(0, 90, 156, 0.3);
-}
+.chat-input-area:focus-within .input-wrapper { background: white; border-color: var(--primary); box-shadow: 0 0 0 3px var(--primary-light); }
+
+#user-input { flex: 1; border: none; background: transparent; padding: 10px 15px; outline: none; font-size: 15px; }
 #send-button {
-    padding: 14px 22px; /* Tăng padding */
-    background-color: #005A9C;
-    color: white;
-    border: none;
-    border-radius: 10px; /* Bo tròn */
-    cursor: pointer;
-    font-size: 16px;
-    font-weight: bold;
-    box-shadow: 0 2px 5px rgba(0, 90, 156, 0.2);
-    transition: background-color 0.2s, transform 0.1s;
+    width: 40px; height: 40px; border-radius: 50%; background: var(--primary); color: white;
+    border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: 0.2s; flex-shrink: 0;
 }
-#send-button:hover {
-    background-color: #004a80;
-}
-#send-button:active {
-    transform: scale(0.98); /* Hiệu ứng nhấn */
-}
+#send-button:hover { background: #004a80; transform: scale(1.05); }
 
-/* --- SPINNER (LOADING) --- */
+/* --- UTILS --- */
+/* Spinner Fix Lỗi Màu */
 .spinner {
-    border: 4px solid #f3f3f3;
-    border-top: 4px solid #005A9C;
-    border-radius: 50%;
-    width: 20px;
-    height: 20px;
-    animation: spin 1s linear infinite;
-    margin: 10px auto 0 auto;
+    border: 3px solid #f3f3f3; /* Màu xám nhạt an toàn */
+    border-top: 3px solid var(--primary);
+    border-radius: 50%; width: 20px; height: 20px;
+    animation: spin 1s linear infinite; margin: 10px auto;
 }
-@keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
-}
-/* Spinner cho tin nhắn bot */
-.spinner-dots { display: flex; align-items: center; justify-content: center; height: 100%; }
-.spinner-dots .dot {
-    width: 8px; height: 8px; background-color: #888; border-radius: 50%; margin: 0 3px;
-    animation: bounce 1.2s infinite ease-in-out;
-}
-.spinner-dots .dot:nth-child(2) { animation-delay: -0.15s; }
-.spinner-dots .dot:nth-child(3) { animation-delay: -0.3s; }
-@keyframes bounce {
-    0%, 80%, 100% { transform: scale(0); }
-    40% { transform: scale(1.0); }
-}
+@keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
-/* --- STYLE CHO SIDEBAR MỚI --- */
-.new-chat-btn {
-    background-color: #e8f0fe; /* Màu xanh nhạt Google */
-    color: #005A9C;
-    border: 1px solid #B3EBF2;
-    border-radius: 20px;
-    padding: 12px 20px;
-    width: 100%;
-    cursor: pointer;
-    font-weight: bold;
-    transition: all 0.2s;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
-    margin-bottom: 10px;
-}
-.new-chat-btn:hover {
-    background-color: #d2e3fc;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-}
+.spinner-dots { display: flex; gap: 4px; }
+.dot { width: 8px; height: 8px; background: var(--primary); border-radius: 50%; animation: bounce 1.4s infinite ease-in-out both; }
+.dot:nth-child(1) { animation-delay: -0.32s; }
+.dot:nth-child(2) { animation-delay: -0.16s; }
+@keyframes bounce { 0%, 80%, 100% { transform: scale(0); } 40% { transform: scale(1); } }
 
-.section-title {
-    font-size: 12px;
-    text-transform: uppercase;
-    color: #666;
-    margin: 15px 0 10px 0;
-    padding-left: 10px;
-    font-weight: bold;
-}
-
-.history-list {
-    max-height: 300px; /* Giới hạn chiều cao */
-    overflow-y: auto;
-}
-
-Vấn đề này xảy ra do tiêu đề cuộc trò chuyện quá dài, và trong CSS hiện tại chưa có thuộc tính để "cắt bớt" chữ khi nó vượt quá chiều rộng của thanh sidebar. Điều này khiến dòng chữ đẩy nút "x" trôi ra khỏi màn hình.
-
-Để khắc phục và làm cho giao diện đẹp hơn (tự động hiện dấu "..." khi tên quá dài), bạn hãy mở file static/style.css và thêm/sửa đoạn code CSS cho class .history-item như sau:
-
-Cập nhật static/style.css
-Bạn tìm class .history-item và thay thế (hoặc sửa) thành đoạn code dưới đây:
-
-CSS
-
-/* --- SỬA LỖI HIỂN THỊ LỊCH SỬ CHAT --- */
-
-.history-item {
-    padding: 10px 15px;
-    margin-bottom: 8px; /* Tăng khoảng cách một chút cho thoáng */
-    cursor: pointer;
-    border-radius: 18px;
-    color: #333;
-    background-color: rgba(255, 255, 255, 0.5); /* Màu nền nhẹ */
-    
-    /* Flexbox để căn chỉnh hàng ngang */
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    
-    /* Giới hạn chiều rộng */
-    max-width: 100%;
-    box-sizing: border-box;
-    transition: background 0.2s;
-}
-
-.history-item:hover {
-    background-color: #EBF5FB;
-}
-
-.history-item.active {
-    background-color: #d0eefc;
-    color: #005A9C;
-    font-weight: 600;
-    border: 1px solid #B3EBF2;
-}
-
-/* Xử lý phần tên tiêu đề (Span) */
-.history-item span {
-    flex: 1;                 /* Chiếm toàn bộ khoảng trống còn lại */
-    white-space: nowrap;     /* Bắt buộc chữ nằm trên 1 dòng */
-    overflow: hidden;        /* Ẩn phần chữ bị tràn */
-    text-overflow: ellipsis; /* Thêm dấu "..." vào cuối nếu chữ quá dài */
-    margin-right: 10px;      /* Tạo khoảng cách với nút xóa */
-    min-width: 0;            /* Quan trọng: Giúp Flexbox co lại đúng cách */
-}
-
-/* Xử lý nút Xóa (dấu x) */
-.delete-chat-btn {
-    flex-shrink: 0;          /* Đảm bảo nút xóa KHÔNG BAO GIỜ bị co nhỏ */
-    background: none;
-    border: none;
-    color: #999;
-    cursor: pointer;
-    font-size: 16px;         /* Tăng kích thước một chút cho dễ bấm */
-    width: 24px;
-    height: 24px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 50%;
-    transition: color 0.2s, background 0.2s;
-}
-
-.delete-chat-btn:hover {
-    color: #ff4444;
-    background-color: rgba(255, 0, 0, 0.1); /* Hiệu ứng nền đỏ nhạt khi di chuột */
-}
-
-.divider {
-    height: 1px;
-    background-color: #99ddea;
-    margin: 20px 0;
-}
-
-/* --- TĂNG KÍCH THƯỚC KHU VỰC UPLOAD --- */
-
-/* Style cho input file */
-.sidebar-content input[type="file"] {
-    margin-bottom: 20px; /* Tăng khoảng cách dưới */
-    padding: 10px;
-    background-color: #f0f8ff;
-    border: 1px dashed #005A9C;
-    border-radius: 8px;
-    width: 90%; /* Căn chỉnh lại chiều rộng */
-}
-
-/* Style cho nút Upload & Process */
-.sidebar-content button#upload-button {
-    margin-top: 15px; /* Cách xa input file ra */
-    padding: 15px 0; /* Nút cao hơn, dễ bấm hơn */
-    font-size: 16px;
-    background-color: #005A9C;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.2); /* Đổ bóng nổi bật */
-    transition: transform 0.1s;
-}
-
-.sidebar-content button#upload-button:active {
-    transform: scale(0.98);
-}
-
-/* Style cho nút Xóa file (dấu X) */
-.delete-file-btn {
-    background: none;
-    border: none;
-    color: #ff4d4d; /* Màu đỏ */
-    font-weight: bold;
-    cursor: pointer;
-    margin-left: 10px;
-    padding: 5px 8px;
-    border-radius: 50%;
-    transition: background 0.2s;
-}
-.delete-file-btn:hover {
-    background-color: #ffe6e6;
-}
-
-.pdf-item {
-    /* Căn giữa nội dung file và nút xóa */
-    display: flex;
-    align-items: center; 
-    justify-content: space-between; 
-}
-
-/* --- SỬA LỖI MẤT NÚT X KHI TÊN FILE DÀI --- */
-
-.pdf-item {
-    display: flex;
-    align-items: center;       /* Căn giữa theo chiều dọc */
-    justify-content: space-between;
-    gap: 10px;                 /* Khoảng cách giữa tên và nút X */
-    padding: 8px 12px;
-    background: rgba(255, 255, 255, 0.4);
-    border-radius: 6px;
-    margin-bottom: 10px;
-    /* Đảm bảo khung không bị tràn ra ngoài sidebar */
-    max-width: 100%;
-    box-sizing: border-box; 
-}
-
-.pdf-item span {
-    flex: 1;                   /* Cho phép phần tên chiếm hết khoảng trống còn lại */
-    white-space: normal;       /* Cho phép xuống dòng */
-    word-break: break-word;    /* QUAN TRỌNG: Bẻ gãy từ dài để xuống dòng */
-    min-width: 0;              /* Cần thiết để flexbox co lại đúng cách */
-    font-size: 14px;
-    line-height: 1.4;
-}
-
-.delete-file-btn {
-    flex-shrink: 0;            /* Đảm bảo nút X không bao giờ bị co nhỏ lại */
-    width: 24px;
-    height: 24px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: #ffe6e6;
-    border-radius: 50%;
-    color: #ff4d4d;
-}
+.source-box { margin-top: 10px; padding-top: 8px; border-top: 1px solid #eee; font-size: 13px; color: var(--text-sub); }
+.info-text { text-align: center; font-style: italic; color: #999; margin-top: 20px; font-size: 13px; }
