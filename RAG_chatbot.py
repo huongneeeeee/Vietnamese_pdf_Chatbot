@@ -24,11 +24,13 @@ custom_prompt_template = """
 Bạn là một trợ lý AI chuyên nghiệp, chuyên hỗ trợ người dùng Việt Nam tổng hợp và tra cứu thông tin từ tài liệu.
 
 Dưới đây là các đoạn thông tin (Context) được trích xuất từ các tài liệu khác nhau:
+
 ---------------------
 {context}
 ---------------------
 
 Lịch sử chat:
+
 {history_global}
 
 Câu hỏi của người dùng: 
