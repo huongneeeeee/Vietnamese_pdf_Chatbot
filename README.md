@@ -1,4 +1,4 @@
-# 🇻🇳 Vietnamese PDF Chatbot (RAG Technology)
+# Vietnamese PDF Chatbot (RAG Technology)
 
 > **Hệ thống Chatbot hỗ trợ truy vấn văn bản tiếng Việt sử dụng công nghệ Retrieval-Augmented Generation (RAG)**
 
@@ -19,7 +19,7 @@ Dự án này là một ứng dụng Web Chatbot thông minh, cho phép người
 * **Prompt Engineering:** Áp dụng kỹ thuật *Instruction Tuning* để đảm bảo Bot luôn trả lời tiếng Việt và trung thực với tài liệu.
 * **Query Rewriting:** Tự động viết lại các câu hỏi ngắn/thiếu ý để tăng độ chính xác khi tìm kiếm.
 
-### ⚡ Hiệu năng & Tối ưu hóa
+### Hiệu năng & Tối ưu hóa
 * **Vector Database:** Sử dụng **FAISS** để tìm kiếm tương đồng (Similarity Search) tốc độ cao.
 * **Chống trùng lặp (Hashing):** Sử dụng thuật toán **SHA-256** để kiểm tra mã băm của file. Nếu file đã tồn tại, hệ thống tái sử dụng Vector cũ -> Tiết kiệm tài nguyên và thời gian xử lý.
 * **Lọc nhiễu (Noise Filtering):** Loại bỏ các đoạn văn bản không liên quan dựa trên ngưỡng tương đồng (`threshold = 1.8`).
